@@ -1,0 +1,10 @@
+self.size = size
+    self.x = []
+    self.y = []
+    for element in range(0, size):
+      self.y.append(" ")
+    for element in range(0, size):
+      self.x.append(self.y)
+
+
+input("Coordonnées de tir : ")
