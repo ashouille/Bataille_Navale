@@ -22,7 +22,7 @@ game_player_tab = Plateau(10)
 computer_player_tab = Plateau(10)
 
 print("Bienvenue dans le jeu de bataille navale")
-#Placement des navires de l'ordinateur
+#Placement des navires de l'IA
 computer_tab.init_computer_board(player_ship_list)
 computer_tab.print_tab()
 
