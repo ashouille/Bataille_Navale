@@ -1,5 +1,9 @@
-from tkinter import *
 import webbrowser
+from tkinter import Button
+from tkinter import Frame
+from tkinter import Label
+from tkinter import SUNKEN
+from tkinter import Tk
 
 
 def test_link():
@@ -30,7 +34,7 @@ button = Button(
     fg="white",
     command=test_link,
 )
-button.pack(pady=25, fill=X)
+#  button.pack(pady=25, fill=X) que vaut X
 frame.pack(expand=True)
 
 window.mainloop()

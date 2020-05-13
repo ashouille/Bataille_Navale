@@ -1,4 +1,6 @@
-from classes import Ship, Plateau, random
+from classes import Plateau
+from classes import random
+from classes import Ship
 
 porte_avions_player = Ship("Porte-Avions", 5, "P")
 croiseur_player = Ship("Croiseur", 4, "C")
@@ -42,24 +44,24 @@ computer_tab.print_tab()
 element = 0
 while element < len(player_ship_list):
     is_good = False
-    while is_good == False:
+    while not is_good:
         spot = input(
             "Saisir la position du {} ({} cases) : ".format(
                 player_ship_list[element].name, player_ship_list[element].lenght
             )
         )
         is_good = player_tab.place_ship(spot, player_ship_list[element])
-        if is_good == True:
+        if is_good:
             element += 1
         player_tab.print_tab()
-        if is_good == False:
+        if not is_good:
             print("Saisie incorrecte, réessayez")
 
 win = False
 number_of_destroyed = 0
 
 # Boucle de jeu
-while win == False:
+while not win:
 
     # Boucle du joueur
 
