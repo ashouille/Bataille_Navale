@@ -1,4 +1,4 @@
-from classes import Ship, Plateau
+from classes import Ship, Plateau, random
 
 porte_avions_player = Ship("Porte-Avions", 5, "P")
 croiseur_player = Ship("Croiseur", 4, "C")
