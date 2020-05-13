@@ -119,13 +119,11 @@ class Plateau:
           char = computer_tab[y_pos][x_pos]
           computer_tab[y_pos][x_pos] = "T"
           self.tab[y_pos][x_pos] = "T"
-          print(y_pos)
           print ("Touché !")
           return char, True
 
         if computer_tab[y_pos][x_pos] == " ":
           self.tab[y_pos][x_pos] = "X"
-          print(y_pos)
           print("Dans l'eau !")
           return " ", True
       else:

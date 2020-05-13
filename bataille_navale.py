@@ -46,17 +46,20 @@ number_of_destroyed = 0
 while win == False:
 
   #Boucle du joueur
-  player_tab.print_tab()
+
   is_good = False
-  while is_good == False:
+  while not is_good:
+    player_tab.print_tab()
+    game_player_tab.print_tab()
     player_input = input("Coordonnées de tir : ")
     char, is_good = game_player_tab.play_position(computer_tab.tab, player_input)
     if is_good:
       for element in computer_ship_list:
         if char == element.char:
           element.is_touched()
-      game_player_tab.print_tab()
-      computer_tab.print_tab()
+      print("Vos navires")
+      player_tab.print_tab()
+
   ships_remaining = 5
   for element in computer_ship_list:
     if element.get_is_destroyed():
@@ -68,7 +71,7 @@ while win == False:
 
   #boucle de l'ordinateur
   is_good = False
-  while is_good == False:
+  while not is_good:
     computer_input = random.choice('ABCDEFGHIJ') + str(random.randint(0, 9))
     char, is_good = computer_player_tab.play_position(player_tab.tab, computer_input)
     if is_good:
