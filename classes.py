@@ -23,7 +23,7 @@ class Plateau:
       letter = chr(ord(letter[0]) + 1)
       print(line)
   
-  def place_is_valid(self, inp, boat):
+  def _place_is_valid(self, inp, boat):
     #test si la chaine de caractère d'entrée est valide (forme : B2H par exemple)
     try:
       if ((inp[0].upper() in "ABCDEFGHIJ")  and 0 <= int(inp[1]) <= self.size) and (inp[2].upper() in 'HV'):
@@ -64,7 +64,7 @@ class Plateau:
 
   def place_ship(self, inp, boat):
     #place la bateau après avoir vérifier si la position est valide
-    if len(inp) == 3 and self.place_is_valid(inp, boat):
+    if len(inp) == 3 and self._place_is_valid(inp, boat):
       y_pos = ord(inp[0].upper())-65
       x_pos = int(inp[1])
       horizontal = False
@@ -79,11 +79,9 @@ class Plateau:
           element += 1
       
       if horizontal == False:
-        element = 0
-        while element < boat.lenght:
+        for element in range(boat.lenght):
           self.tab[int(y_pos)][int(x_pos)] = boat.char
           y_pos += 1
-          element += 1
       return True
     else:
       return False
@@ -99,7 +97,7 @@ class Plateau:
         if is_good == True:
           element += 1
   
-  def spot_is_valid(self, inp):
+  def _spot_is_valid(self, inp):
     #Teste si la position de tir est valide
     if len(inp) == 2:
       try:
@@ -116,19 +114,19 @@ class Plateau:
     try:
       y_pos = ord(inp[0].upper())-65
       x_pos = int(inp[1])
-      if self.spot_is_valid(inp) and self.tab[y_pos][x_pos] == " ":
+      if self._spot_is_valid(inp) and self.tab[y_pos][x_pos] == " ":
         if computer_tab[y_pos][x_pos] in "PCVSR":
           char = computer_tab[y_pos][x_pos]
           computer_tab[y_pos][x_pos] = "T"
           self.tab[y_pos][x_pos] = "T"
           print(y_pos)
-          print ("Touché")
+          print ("Touché !")
           return char, True
 
         if computer_tab[y_pos][x_pos] == " ":
           self.tab[y_pos][x_pos] = "X"
           print(y_pos)
-          print("Dans l'eau")
+          print("Dans l'eau !")
           return " ", True
       else:
         print("Saisie invalide")
@@ -139,11 +137,11 @@ class Plateau:
 
 
 class Ship:
-  def __init__(self, name, lenght, number, char, is_destroyed=False, shot=0):
+  def __init__(self, name, lenght, char, number=0, is_destroyed=False, shot=0):
     self.name = name
     self.lenght = lenght
-    self.number = number
     self.char = char
+    self.number = number
     self.shot = shot
     self.is_destroyed = is_destroyed
 
@@ -151,7 +149,7 @@ class Ship:
     self.shot += 1
     if self.shot == self.lenght:
       self.is_destroyed = True
-      print("{} détruit".format(self.name))
+      print("Vous avez coulé le {} adverse !".format(self.name))
   
   def get_is_destroyed(self):
     return self.is_destroyed

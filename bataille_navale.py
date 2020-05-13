@@ -1,16 +1,16 @@
 from classes import *
 
-porte_avions_player = Ship("Porte-Avions", 5, 1, "P")
-croiseur_player = Ship("Croiseur", 4, 1, "C")
-contre_torpilleur_player = Ship("Contre-torpilleur", 3, 1, "V")
-sous_marin_player = Ship("Sous-marin", 3, 1, "S")
-torpilleur_player = Ship("Torpilleur", 2, 1, "R")
+porte_avions_player = Ship("Porte-Avions", 5, "P")
+croiseur_player = Ship("Croiseur", 4, "C")
+contre_torpilleur_player = Ship("Contre-torpilleur", 3, "V")
+sous_marin_player = Ship("Sous-marin", 3, "S")
+torpilleur_player = Ship("Torpilleur", 2, "R")
 
-porte_avions_computer = Ship("Porte-Avions", 5, 1, "P")
-croiseur_computer = Ship("Croiseur", 4, 1, "C")
-contre_torpilleur_computer = Ship("Contre-torpilleur", 3, 1, "V")
-sous_marin_computer = Ship("Sous-marin", 3, 1, "S")
-torpilleur_computer = Ship("Torpilleur", 2, 1, "R")
+porte_avions_computer = Ship("Porte-Avions", 5, "P")
+croiseur_computer = Ship("Croiseur", 4, "C")
+contre_torpilleur_computer = Ship("Contre-torpilleur", 3, "V")
+sous_marin_computer = Ship("Sous-marin", 3, "S")
+torpilleur_computer = Ship("Torpilleur", 2, "R")
 
 player_ship_list = [porte_avions_player, croiseur_player, contre_torpilleur_player, sous_marin_player, torpilleur_player]
 computer_ship_list = [porte_avions_computer, croiseur_computer, contre_torpilleur_computer, sous_marin_computer, torpilleur_computer]
@@ -41,8 +41,10 @@ while element < len(player_ship_list):
 
 win = False
 number_of_destroyed = 0
+
 #Boucle de jeu
 while win == False:
+
   #Boucle du joueur
   player_tab.print_tab()
   is_good = False
@@ -53,7 +55,6 @@ while win == False:
       for element in computer_ship_list:
         if char == element.char:
           element.is_touched()
-
       game_player_tab.print_tab()
       computer_tab.print_tab()
   ships_remaining = 5
@@ -83,6 +84,7 @@ while win == False:
     win = True
     print("L'ordinateur à Gagné")
     break
+
 game_player_tab.print_tab()
 computer_player_tab.print_tab()
 input()
