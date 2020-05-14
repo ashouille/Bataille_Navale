@@ -56,7 +56,7 @@ while element < len(player_ship_list):
         player_tab.print_tab()
         if not is_good:
             print('Saisie incorrecte, réessayez')
-
+            
 win = False
 number_of_destroyed = 0
 
