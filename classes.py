@@ -41,7 +41,7 @@ class Plateau:
 
         try:
             # Création d'une liste des navires autour de la position voulue.
-            ship_around = ""
+            ship_around = ''
             if horizontal:
                 if y_pos == 0:
                     for elm in range(boat.lenght):
@@ -79,14 +79,14 @@ class Plateau:
             # Boucle de vérification de la présence de navires autour de la position voulu
 
             is_ship_around = False
-            for element in "PCVSR":
+            for element in 'PCVSR':
                 if element in ship_around:
                     is_ship_around = True
 
             # Test si le bateau placé ne dépasse pas le plateau de jeu et si il n'y a pas de collision
 
             if horizontal and x_pos + boat.lenght <= self.size and not is_ship_around:
-                temp_str = ""
+                temp_str = ''
                 cpt = 0
                 while cpt < boat.lenght:
                     temp_str = temp_str + self.tab[y_pos][x_pos]
@@ -96,7 +96,7 @@ class Plateau:
                     return True
 
             if not horizontal and y_pos + boat.lenght <= self.size and not is_ship_around:
-                temp_str = ""
+                temp_str = ''
                 cpt = 0
                 while cpt < boat.lenght:
                     temp_str = temp_str + self.tab[y_pos][x_pos]
