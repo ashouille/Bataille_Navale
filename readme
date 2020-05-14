@@ -11,7 +11,7 @@ La grille remplie de l'IA est volontairement affichée après son initialisation
 Ensuite le joueur doit rentrer les coordonnées de l'avant de son navire, suivi de la lettre correspondant
 à son orientation : H ou V. Par exemple, pour positionner le porte-avions aux positions C2-C3-C4-C5-C6, le
 joueur doit rentrer C2H. Pour un navire à la verticale, C2V positionnera un porte-avions en C2-D2-E2-F2-G2.
-Les navires ne peuvent pas se toucher!
+Les navires ne peuvent pas être placés a coté d'autres navires !
 
 Lorsque les navires sont placés, le jeu démarre. Il faut entrer des coordonnées simples (A4, B9, C7 etc...)
 Lorsqu'un navire est coulé,  le type de navire détruit est indiqué au joueur.
