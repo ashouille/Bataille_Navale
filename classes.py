@@ -24,7 +24,8 @@ class Plateau:
             print(line)
 
     def _place_is_valid(self, inp, boat):
-        # test si la chaine de caractère d'entrée est valide (forme : B2H par exemple)
+        # Test si la chaine de caractère d'entrée est valide (forme : B2H par exemple)
+        global horizontal, y_pos, x_pos
         try:
             if (
                 (inp[0].upper() in 'ABCDEFGHIJ') and 0 <= int(inp[1]) <= self.size
@@ -38,14 +39,54 @@ class Plateau:
         except ValueError:
             return False
 
-        # Test si le bateau placé ne dépasse pas le plateau de jeu et si il n'y a pas de collision
         try:
-            if (
-                horizontal
-                and x_pos + boat.lenght
-                <= self.size  # si on rentre pas dans le if ligne 29 que vaut horizontal ?
-            ):  # x_pos (si on rentre pas ligne 29 que vaut x_pos ?)
-                temp_str = ''
+            # Création d'une liste des navires autour de la position voulue.
+            ship_around = ""
+            if horizontal:
+                if y_pos == 0:
+                    for elm in range(boat.lenght):
+                        ship_around = ship_around + self.tab[y_pos + 1][x_pos + elm]
+                if y_pos == 9:
+                    for elm in range(boat.lenght):
+                        ship_around = ship_around + self.tab[y_pos - 1][x_pos + elm]
+                else:
+                    for elm in range(boat.lenght):
+                        ship_around = ship_around + self.tab[y_pos + 1][x_pos + elm] + self.tab[y_pos - 1][x_pos + elm]
+                if x_pos == 0:
+                    ship_around = ship_around + self.tab[y_pos][boat.lenght]
+                if x_pos + boat.lenght == 9:
+                    ship_around = ship_around + self.tab[y_pos][x_pos - 1]
+                else:
+                    ship_around = ship_around + self.tab[y_pos][x_pos - 1] + self.tab[y_pos][x_pos + boat.lenght]
+
+            if not horizontal:
+                if x_pos == 0:
+                    for elm in range(boat.lenght):
+                        ship_around = ship_around + self.tab[y_pos + elm][x_pos + 1]
+                if x_pos == 9:
+                    for elm in range(boat.lenght):
+                        ship_around = ship_around + self.tab[y_pos + elm][x_pos - 1]
+                else:
+                    for elm in range(boat.lenght):
+                        ship_around = ship_around + self.tab[y_pos + elm][x_pos - 1] + self.tab[y_pos + elm][x_pos + 1]
+                if y_pos == 0:
+                    ship_around = ship_around + self.tab[boat.lenght][x_pos]
+                if y_pos + boat.lenght == 9:
+                    ship_around = ship_around + self.tab[y_pos - 1][x_pos]
+                else:
+                    ship_around = ship_around + self.tab[y_pos - 1][x_pos] + self.tab[y_pos + boat.lenght][x_pos]
+
+            # Boucle de vérification de la présence de navires autour de la position voulu
+
+            is_ship_around = False
+            for element in "PCVSR":
+                if element in ship_around:
+                    is_ship_around = True
+
+            # Test si le bateau placé ne dépasse pas le plateau de jeu et si il n'y a pas de collision
+
+            if horizontal and x_pos + boat.lenght <= self.size and not is_ship_around:
+                temp_str = ""
                 cpt = 0
                 while cpt < boat.lenght:
                     temp_str = temp_str + self.tab[y_pos][x_pos]
@@ -54,8 +95,8 @@ class Plateau:
                 if temp_str == ' ' * boat.lenght:
                     return True
 
-            if not horizontal and y_pos + boat.lenght <= self.size:
-                temp_str = ''
+            if not horizontal and y_pos + boat.lenght <= self.size and not is_ship_around:
+                temp_str = ""
                 cpt = 0
                 while cpt < boat.lenght:
                     temp_str = temp_str + self.tab[y_pos][x_pos]
