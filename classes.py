@@ -31,10 +31,10 @@ class Plateau:
             ) and (inp[2].upper() in 'HV'):
                 y_pos = ord(inp[0].upper()) - 65
                 x_pos = int(inp[1])
+                horizontal = False
                 if inp[2].upper() == 'H':
                     horizontal = True
-                else:
-                    horizontal = False
+
         except ValueError:
             return False
 
@@ -89,8 +89,7 @@ class Plateau:
                     self.tab[int(y_pos)][int(x_pos)] = boat.char
                     y_pos += 1
             return True
-        else:
-            return False
+        return False
 
     def init_computer_board(self, boat_list):
         # Installe les navires de l'ordinateur dans son tableau de jeu
@@ -115,8 +114,7 @@ class Plateau:
                     return True
             except ValueError:
                 return False
-        else:
-            return False
+        return False
 
     def play_position(self, computer_tab, inp):
         try:
@@ -134,9 +132,8 @@ class Plateau:
                     self.tab[y_pos][x_pos] = 'X'
                     print("Dans l'eau !")
                     return ' ', True
-            else:
-                print('Saisie invalide')
-                return ' ', False
+            print('Saisie invalide')
+            return ' ', False
         except IndexError:
             print('Saisie invalide')
             return ' ', False
