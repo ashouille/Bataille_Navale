@@ -35,78 +35,89 @@ class Plateau:
                 horizontal = False
                 if inp[2].upper() == 'H':
                     horizontal = True
-
+            else:
+                return False
         except ValueError:
             return False
 
-        try:
-            # Création d'une liste des navires autour de la position voulue.
+        # x_pos = colonne
+        # y_pos = ligne
+
+            # Création d'une liste de caractère qui va contenir tous les caractères
+            # autour de la position voulue du navire à placer.
             ship_around = ""
             if horizontal:
+                # Ajout des caractères situés en haut et en bas de la position
+                # voulue du bateau avec 3 cas : première ligne, dernière ligne
+                # ou ni l'un ni l'autre
                 if y_pos == 0:
                     for elm in range(boat.lenght):
                         ship_around = ship_around + self.tab[y_pos + 1][x_pos + elm]
-                if y_pos == 9:
-                    for elm in range(boat.lenght):
-                        ship_around = ship_around + self.tab[y_pos - 1][x_pos + elm]
-                else:
+                if 0 < y_pos < 9:
                     for elm in range(boat.lenght):
                         ship_around = (
                             ship_around
                             + self.tab[y_pos + 1][x_pos + elm]
                             + self.tab[y_pos - 1][x_pos + elm]
                         )
+                if y_pos == 9:
+                    for elm in range(boat.lenght):
+                        ship_around = ship_around + self.tab[y_pos - 1][x_pos + elm]
+
+                # Ajout des caractères situés à gauche et à droite de la position
+                # voulue du navire avec 3 cas : première colonne, dernière colonne
+                # ou ni l'une ni l'autre
                 if x_pos == 0:
                     ship_around = ship_around + self.tab[y_pos][boat.lenght]
-                if x_pos + boat.lenght == 9:
-                    ship_around = ship_around + self.tab[y_pos][x_pos - 1]
-                else:
+                if 0 < x_pos + boat.lenght < 9:
                     ship_around = (
                         ship_around
                         + self.tab[y_pos][x_pos - 1]
                         + self.tab[y_pos][x_pos + boat.lenght]
                     )
+                if x_pos + boat.lenght == 9:
+                    ship_around = ship_around + self.tab[y_pos][x_pos - 1]
 
+            # Meme opération si le navire doit etre positionné à la verticale
             if not horizontal:
-                if x_pos == 0:
-                    for elm in range(boat.lenght):
-                        ship_around = ship_around + self.tab[y_pos + elm][x_pos + 1]
-                if x_pos == 9:
-                    for elm in range(boat.lenght):
-                        ship_around = ship_around + self.tab[y_pos + elm][x_pos - 1]
-                else:
-                    for elm in range(boat.lenght):
-                        ship_around = (
-                            ship_around
-                            + self.tab[y_pos + elm][x_pos - 1]
-                            + self.tab[y_pos + elm][x_pos + 1]
-                        )
                 if y_pos == 0:
                     ship_around = ship_around + self.tab[boat.lenght][x_pos]
                 if y_pos + boat.lenght == 9:
                     ship_around = ship_around + self.tab[y_pos - 1][x_pos]
-                else:
+                if 0 < y_pos + boat.lenght < 9:
                     ship_around = (
                         ship_around
                         + self.tab[y_pos - 1][x_pos]
                         + self.tab[y_pos + boat.lenght][x_pos]
                     )
 
-            # Boucle de vérification de la présence de navires autour de la position voulu
+                if x_pos == 0:
+                    for elm in range(boat.lenght):
+                        ship_around = ship_around + self.tab[y_pos + elm][x_pos + 1]
+                if 0 < x_pos < 9:
+                    for elm in range(boat.lenght):
+                        ship_around = (
+                            ship_around
+                            + self.tab[y_pos + elm][x_pos - 1]
+                            + self.tab[y_pos + elm][x_pos + 1]
+                        )
+                if x_pos == 9:
+                    for elm in range(boat.lenght):
+                        ship_around = ship_around + self.tab[y_pos + elm][x_pos - 1]
 
-            is_ship_around = False
+            # Si une lettre est trouvée dans ship_around, un navire est à proximité et
+            # la fonction renvoi False
             for element in "PCVSR":
                 if element in ship_around:
-                    is_ship_around = True
+                    return False
 
-            # Test si le bateau placé ne dépasse pas le plateau de jeu et si il n'y a pas de collision
-
-            if horizontal and x_pos + boat.lenght <= self.size and not is_ship_around:
+            # Test si le bateau placé ne dépasse pas du plateau et si il n'y a pas de collision
+        try:
+            if horizontal and x_pos + boat.lenght <= self.size:
                 temp_str = ""
                 cpt = 0
-                while cpt < boat.lenght:
+                for cpt in range(boat.lenght):
                     temp_str = temp_str + self.tab[y_pos][x_pos]
-                    cpt += 1
                     x_pos += 1
                 if temp_str == " " * boat.lenght:
                     return True
@@ -114,20 +125,18 @@ class Plateau:
             if (
                 not horizontal
                 and y_pos + boat.lenght <= self.size
-                and not is_ship_around
             ):
                 temp_str = ""
                 cpt = 0
-                while cpt < boat.lenght:
+                for cpt in range(boat.lenght):
                     temp_str = temp_str + self.tab[y_pos][x_pos]
-                    cpt += 1
                     y_pos += 1
                 if temp_str == " " * boat.lenght:
                     return True
         except IndexError:
             return False
-        else:
-            return False
+
+        #return False
 
     def place_ship(self, inp, boat):
         # place la bateau après avoir vérifier si la position est valide
