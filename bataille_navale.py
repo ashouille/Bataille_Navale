@@ -2,17 +2,17 @@ from classes import Plateau
 from classes import random
 from classes import Ship
 
-porte_avions_player = Ship("Porte-Avions", 5, "P")
-croiseur_player = Ship("Croiseur", 4, "C")
-contre_torpilleur_player = Ship("Contre-torpilleur", 3, "V")
-sous_marin_player = Ship("Sous-marin", 3, "S")
-torpilleur_player = Ship("Torpilleur", 2, "R")
+porte_avions_player = Ship('Porte-Avions', 5, 'P')
+croiseur_player = Ship('Croiseur', 4, 'C')
+contre_torpilleur_player = Ship('Contre-torpilleur', 3, 'V')
+sous_marin_player = Ship('Sous-marin', 3, 'S')
+torpilleur_player = Ship('Torpilleur', 2, 'R')
 
-porte_avions_computer = Ship("Porte-Avions", 5, "P")
-croiseur_computer = Ship("Croiseur", 4, "C")
-contre_torpilleur_computer = Ship("Contre-torpilleur", 3, "V")
-sous_marin_computer = Ship("Sous-marin", 3, "S")
-torpilleur_computer = Ship("Torpilleur", 2, "R")
+porte_avions_computer = Ship('Porte-Avions', 5, 'P')
+croiseur_computer = Ship('Croiseur', 4, 'C')
+contre_torpilleur_computer = Ship('Contre-torpilleur', 3, 'V')
+sous_marin_computer = Ship('Sous-marin', 3, 'S')
+torpilleur_computer = Ship('Torpilleur', 2, 'R')
 
 player_ship_list = [
     porte_avions_player,
@@ -28,14 +28,14 @@ computer_ship_list = [
     sous_marin_computer,
     torpilleur_computer,
 ]
-spot = ""
+spot = ''
 
 player_tab = Plateau(10)
 computer_tab = Plateau(10)
 game_player_tab = Plateau(10)
 computer_player_tab = Plateau(10)
 
-print("Bienvenue dans le jeu de bataille navale")
+print('Bienvenue dans le jeu de bataille navale')
 # Placement des navires de l'IA
 computer_tab.init_computer_board(player_ship_list)
 computer_tab.print_tab()
@@ -46,7 +46,7 @@ while element < len(player_ship_list):
     is_good = False
     while not is_good:
         spot = input(
-            "Saisir la position du {} ({} cases) : ".format(
+            'Saisir la position du {} ({} cases) : '.format(
                 player_ship_list[element].name, player_ship_list[element].lenght
             )
         )
@@ -55,12 +55,13 @@ while element < len(player_ship_list):
             element += 1
         player_tab.print_tab()
         if not is_good:
-            print("Saisie incorrecte, réessayez")
+            print('Saisie incorrecte, réessayez')
 
 win = False
 number_of_destroyed = 0
 
 # Boucle de jeu
+# TODO Boucle trop complexe, à rendre plus simple.
 while not win:
 
     # Boucle du joueur
@@ -69,13 +70,13 @@ while not win:
     while not is_good:
         player_tab.print_tab()
         game_player_tab.print_tab()
-        player_input = input("Coordonnées de tir : ")
+        player_input = input('Coordonnées de tir : ')
         char, is_good = game_player_tab.play_position(computer_tab.tab, player_input)
         if is_good:
             for element in computer_ship_list:
                 if char == element.char:
                     element.is_touched()
-            print("Vos navires")
+            print('Vos navires')
             player_tab.print_tab()
 
     ships_remaining = 5
@@ -84,13 +85,13 @@ while not win:
             ships_remaining -= 1
     if ships_remaining == 0:
         win = True
-        print("Vous avez Gagné")
+        print('Vous avez Gagné')
         break
 
     # boucle de l'ordinateur
     is_good = False
     while not is_good:
-        computer_input = random.choice("ABCDEFGHIJ") + str(random.randint(0, 9))
+        computer_input = random.choice('ABCDEFGHIJ') + str(random.randint(0, 9))
         char, is_good = computer_player_tab.play_position(
             player_tab.tab, computer_input
         )
@@ -101,7 +102,7 @@ while not win:
 
     ships_remaining = 5
     for element in player_ship_list:
-        if element.get_is_destroyed():
+        if element.is_destroyed:
             ships_remaining -= 1
     if ships_remaining == 0:
         win = True
