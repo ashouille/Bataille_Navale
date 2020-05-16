@@ -82,14 +82,15 @@ class Plateau:
             if not horizontal:
                 if y_pos == 0:
                     ship_around = ship_around + self.tab[boat.lenght][x_pos]
-                if y_pos + boat.lenght == 9:
-                    ship_around = ship_around + self.tab[y_pos - 1][x_pos]
                 if 0 < y_pos + boat.lenght < 9:
                     ship_around = (
                         ship_around
                         + self.tab[y_pos - 1][x_pos]
                         + self.tab[y_pos + boat.lenght][x_pos]
                     )
+                if y_pos + boat.lenght == 9:
+                    ship_around = ship_around + self.tab[y_pos - 1][x_pos]
+
 
                 if x_pos == 0:
                     for elm in range(boat.lenght):
@@ -104,7 +105,7 @@ class Plateau:
                 if x_pos == 9:
                     for elm in range(boat.lenght):
                         ship_around = ship_around + self.tab[y_pos + elm][x_pos - 1]
-
+            print("|" + ship_around + "|")
             # Si une lettre est trouvée dans ship_around, un navire est à proximité et
             # la fonction renvoi False
             for element in "PCVSR":
