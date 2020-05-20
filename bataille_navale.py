@@ -1,6 +1,4 @@
-from classes import Plateau
-from classes import random
-from classes import Ship
+from classes import Plateau, random, Ship, has_won
 
 porte_avions_player = Ship('Porte-Avions', 5, 'P')
 croiseur_player = Ship('Croiseur', 4, 'C')
@@ -58,7 +56,6 @@ while element < len(player_ship_list):
             print('Saisie incorrecte, réessayez')
 
 win = False
-number_of_destroyed = 0
 
 # Boucle de jeu
 # TODO Boucle trop complexe, à rendre plus simple.
@@ -79,12 +76,7 @@ while not win:
             print('Vos navires')
             player_tab.print_tab()
 
-    ships_remaining = 5
-    for element in computer_ship_list:
-        if element.get_is_destroyed():
-            ships_remaining -= 1
-    if ships_remaining == 0:
-        win = True
+    if has_won(computer_ship_list):
         print('Vous avez Gagné')
         break
 
@@ -100,12 +92,7 @@ while not win:
                 if char == element.char:
                     element.is_touched()
 
-    ships_remaining = 5
-    for element in player_ship_list:
-        if element.is_destroyed:
-            ships_remaining -= 1
-    if ships_remaining == 0:
-        win = True
+    if has_won(player_ship_list):
         print("L'ordinateur à Gagné")
         break
 
