@@ -5,6 +5,9 @@ class Plateau:
     def __init__(self, size):
         self.size = size
         self.tab = [[' '] * size for _ in range(size)]
+        self.x_pos = 0
+        self.y_pos = 0
+        self.horizontal = False
 
     def print_tab(self):
         first_line = '  | '
@@ -24,48 +27,51 @@ class Plateau:
             print(line)
 
     def _place_is_valid(self, inp, boat):
-        # TODO fonction encore trop complexe, à rendre plus simple
+
         # Test si la chaine de caractère d'entrée est valide (forme : B2H par exemple)
-        try:
-            if (
-                (inp[0].upper() in 'ABCDEFGHIJ') and 0 <= int(inp[1]) <= self.size
-            ) and (inp[2].upper() in 'HV'):
-                y_pos = ord(inp[0].upper()) - 65
-                x_pos = int(inp[1])
-                horizontal = False
-                if inp[2].upper() == 'H':
-                    horizontal = True
-            else:
-                return False
-        except ValueError:
+        # Si True, defini les variables x_pos, y_pos et horizontal
+        if (
+                len(inp) == 3
+                and inp[0].upper() in 'ABCDEFGHIJ'
+                and inp[1].isdigit()
+                and inp[2].upper() in 'HV'
+        ):
+            self.y_pos = ord(inp[0].upper()) - 65
+            self.x_pos = int(inp[1])
+            self.horizontal = False
+            if inp[2].upper() == 'H':
+                self.horizontal = True
+        else:
             return False
 
         # Si la taille du navire dépasse du plateau, retourne False
-        if horizontal and x_pos + boat.lenght >= self.size:
-            return False
-
-        if not horizontal and y_pos + boat.lenght >= self.size:
+        if (self.horizontal and self.x_pos + boat.lenght >= self.size or
+            not self.horizontal and self.y_pos + boat.lenght >= self.size
+        ):
             return False
 
         # Pour chaque coordonnée du navire, ajoute les caractère haut, bas
         # gauche et droite dans ship_around
         ship_around = ''
-        for _ in range(boat.lenght):  # utiliser _ quand la variable de la boucle n'est pas utilisée.
+        for elt in range(boat.lenght):
 
-            if x_pos - 1 >= 0:
-                ship_around += self.tab[y_pos][x_pos - 1]
-            if x_pos + 1 < self.size:
-                ship_around += self.tab[y_pos][x_pos + 1]
+            if self.horizontal:
+                temp_x = self.x_pos + elt
+                temp_y = self.y_pos
 
-            if y_pos - 1 >= 0:
-                ship_around += self.tab[y_pos - 1][x_pos]
-            if y_pos + 1 < self.size:
-                ship_around += self.tab[y_pos + 1][x_pos]
+            if not self.horizontal:
+                temp_y = self.y_pos + elt
+                temp_x = self.x_pos
 
-            if horizontal:
-                x_pos += 1
-            if not horizontal:
-                y_pos += 1
+            if temp_x - 1 >= 0:
+                ship_around += self.tab[temp_y][temp_x - 1]
+            if temp_x + 1 < self.size:
+                ship_around += self.tab[temp_y][temp_x + 1]
+
+            if temp_y - 1 >= 0:
+                ship_around += self.tab[temp_y - 1][temp_x]
+            if temp_y + 1 < self.size:
+                ship_around += self.tab[temp_y + 1][temp_x]
 
         # Si aucun caractère n'est trouvé dans ship_around, retourne True
         for element in 'PCVSR':
@@ -75,24 +81,13 @@ class Plateau:
 
     def place_ship(self, inp, boat):
         # place la bateau après avoir vérifier si la position est valide
-        if len(inp) == 3 and self._place_is_valid(inp, boat):
-            y_pos = ord(inp[0].upper()) - 65
-            x_pos = int(inp[1])
-            horizontal = False
-            if inp[2].upper() == 'H':
-                horizontal = True
-
-            if horizontal:
-                element = 0
-                while element < boat.lenght:
-                    self.tab[int(y_pos)][int(x_pos)] = boat.char
-                    x_pos += 1
-                    element += 1
-
-            if not horizontal:
+        if self._place_is_valid(inp, boat):
+            if self.horizontal:
                 for element in range(boat.lenght):
-                    self.tab[int(y_pos)][int(x_pos)] = boat.char
-                    y_pos += 1
+                    self.tab[self.y_pos][self.x_pos + element] = boat.char
+            if not self.horizontal:
+                for element in range(boat.lenght):
+                    self.tab[self.y_pos + element][self.x_pos] = boat.char
             return True
         return False
 
@@ -103,9 +98,9 @@ class Plateau:
             is_good = False
             while not is_good:
                 spot = (
-                    random.choice('ABCDEFGHIJ')
-                    + str(random.randint(0, 9))
-                    + random.choice('HV')
+                        random.choice('ABCDEFGHIJ')
+                        + str(random.randint(0, 9))
+                        + random.choice('HV')
                 )
                 is_good = self.place_ship(spot, boat_list[element])
                 if is_good:
@@ -114,34 +109,30 @@ class Plateau:
     def _spot_is_valid(self, inp):
         # Teste si la position de tir est valide
         if len(inp) == 2:
-            try:
-                if (inp[0].upper() in 'ABCDEFGHIJ') and 0 <= int(inp[1]) <= self.size:
-                    return True
-            except ValueError:
-                return False
+            if (inp[0].upper() in 'ABCDEFGHIJ'
+                    and inp[1].isdigit()
+                    and self.tab[self.y_pos][self.x_pos] == ' '
+            ):
+                self.y_pos = ord(inp[0].upper()) - 65
+                self.x_pos = int(inp[1])
+                return True
         return False
 
     def play_position(self, computer_tab, inp):
-        try:
-            y_pos = ord(inp[0].upper()) - 65
-            x_pos = int(inp[1])
-            if self._spot_is_valid(inp) and self.tab[y_pos][x_pos] == ' ':
-                if computer_tab[y_pos][x_pos] in 'PCVSR':
-                    char = computer_tab[y_pos][x_pos]
-                    computer_tab[y_pos][x_pos] = 'T'
-                    self.tab[y_pos][x_pos] = 'T'
-                    print('Touché !')
-                    return char, True
+        if self._spot_is_valid(inp):
+            if computer_tab[self.y_pos][self.x_pos] in 'PCVSR':
+                char = computer_tab[self.y_pos][self.x_pos]
+                computer_tab[self.y_pos][self.x_pos] = 'T'
+                self.tab[self.y_pos][self.x_pos] = 'T'
+                print('Touché !')
+                return char, True
 
-                if computer_tab[y_pos][x_pos] == ' ':
-                    self.tab[y_pos][x_pos] = 'X'
-                    print("Dans l'eau !")
-                    return ' ', True
-            print('Saisie invalide')
-            return ' ', False
-        except IndexError:
-            print('Saisie invalide')
-            return ' ', False
+            if computer_tab[self.y_pos][self.x_pos] == ' ':
+                self.tab[self.y_pos][self.x_pos] = 'X'
+                print("Dans l'eau !")
+                return ' ', True
+        print('Saisie invalide')
+        return ' ', False
 
 
 class Ship:
