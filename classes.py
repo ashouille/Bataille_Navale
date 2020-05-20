@@ -1,6 +1,16 @@
 import random
 
 
+def has_won(tab):
+    ships_remaining = 5
+    for element in tab:
+        if element.is_destroyed:
+            ships_remaining -= 1
+    if ships_remaining == 0:
+        return True
+    return False
+
+
 class Plateau:
     def __init__(self, size):
         self.size = size
@@ -133,7 +143,6 @@ class Plateau:
                 return ' ', True
         print('Saisie invalide')
         return ' ', False
-
 
 class Ship:
     def __init__(self, name, lenght, char, number=0, is_destroyed=False, shot=0):
