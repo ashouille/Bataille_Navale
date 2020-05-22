@@ -1,4 +1,4 @@
-from classes import Plateau, random, Ship, has_won
+from classes import Plateau, random, Ship, finished
 
 porte_avions_player = Ship('Porte-Avions', 5, 'P')
 croiseur_player = Ship('Croiseur', 4, 'C')
@@ -54,29 +54,21 @@ while element < len(player_ship_list):
         player_tab.print_tab()
         if not is_good:
             print('Saisie incorrecte, réessayez')
+    player_tab.print_tab()
 
 win = False
-
 # Boucle de jeu
-# TODO Boucle trop complexe, à rendre plus simple.
 while not win:
-
     # Boucle du joueur
-
     is_good = False
     while not is_good:
         player_tab.print_tab()
         game_player_tab.print_tab()
         player_input = input('Coordonnées de tir : ')
-        char, is_good = game_player_tab.play_position(computer_tab.tab, player_input)
-        if is_good:
-            for element in computer_ship_list:
-                if char == element.char:
-                    element.is_touched()
-            print('Vos navires')
-            player_tab.print_tab()
-
-    if has_won(computer_ship_list):
+        is_good = game_player_tab.play_position(
+            computer_tab.tab, player_input, computer_ship_list
+        )
+    if finished(computer_ship_list):
         print('Vous avez Gagné')
         break
 
@@ -84,15 +76,10 @@ while not win:
     is_good = False
     while not is_good:
         computer_input = random.choice('ABCDEFGHIJ') + str(random.randint(0, 9))
-        char, is_good = computer_player_tab.play_position(
-            player_tab.tab, computer_input
+        is_good = computer_player_tab.play_position(
+            player_tab.tab, computer_input, player_ship_list
         )
-        if is_good:
-            for element in player_ship_list:
-                if char == element.char:
-                    element.is_touched()
-
-    if has_won(player_ship_list):
+    if finished(player_ship_list):
         print("L'ordinateur à Gagné")
         break
 
